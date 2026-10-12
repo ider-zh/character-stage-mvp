@@ -23,6 +23,7 @@
 
 ```bash
 npm ci
+npm run prepare:camera
 npm run dev
 ```
 
@@ -35,11 +36,13 @@ npm run build
 npm start
 ```
 
-打开 http://127.0.0.1:8787 。默认仅绑定本机，不公开上线。所有摄像头运行资源已放在 `public/`，运行时不会访问外部 CDN。
+打开 http://127.0.0.1:8787 。默认仅绑定本机，不公开上线。`npm run prepare:camera` 会补齐或校验 `public/` 内固定版本摄像头资源；运行时不会访问外部 CDN。
 
 配置：复制 `.env.example` 为 `.env` 后用 `node --env-file=.env --experimental-strip-types server/index.ts` 启动，或由进程环境设置变量。`npm start` 不自动加载 `.env`。不要放入任何 API 密钥到浏览器前缀变量。首版没有 AI 密钥配置项。
 
-如果删除了打包的摄像头资源，运行 `npm run prepare:camera`：从安装包复制固定版本 WASM、下载 Google 固定版本模型并校验 SHA-256。下载只发生在这一步；页面开启摄像头不会下载远程模型。
+首次克隆或删除了摄像头资源时，运行 `npm run prepare:camera`：从安装包复制固定版本 WASM，在模型缺失时下载 Google 固定版本模型，并校验 SHA-256。下载只发生在这一步；页面开启摄像头不会下载远程模型。
+
+本次生产前端构建产物保存在 [`release-artifacts/dist/`](release-artifacts/dist/)，使用方式及验证范围见 [`release-artifacts/README.md`](release-artifacts/README.md)。完整应用仍需 Node 后端，不能将静态目录单独上传后当作完整服务。
 
 ## 验证
 
